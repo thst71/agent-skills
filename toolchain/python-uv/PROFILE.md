@@ -14,7 +14,7 @@ lint = "ruff check ."
 format-check = "ruff format --check ."
 typecheck = "mypy"
 test = "pytest"
-validate-specs = "python scripts/validate_specs.py"
+validate-specs = ".agents/skills/spec-system/bin/validate-specs"
 check = ["lint", "format-check", "typecheck", "test", "validate-specs"]
 ```
 
@@ -34,3 +34,18 @@ Levels are pytest markers, registered under `[tool.pytest.ini_options] markers` 
 - `print()` (ruff rule `T20` catches it), `breakpoint()`, `pdb` imports
 - Unused imports and variables (ruff `F`)
 - `# type: ignore` without an error code
+
+## Release
+
+- `version`: `uv version --short`; the version is `[project] version` in `pyproject.toml`.
+- `dist`: `uv build` (sdist and wheel into `dist/`), as poe tasks `version` and `dist`.
+
+Release Build steps:
+
+```yaml
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync
+      - run: uv run poe check
+      - run: test "$(uv version --short)" = "${{ needs.verify.outputs.version }}"
+      - run: uv run poe dist
+```

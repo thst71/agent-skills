@@ -15,7 +15,7 @@
 | `lint` | `checkstyleMain`, `spotbugsMain` or the project's analysis |
 | `format-check` | `spotlessCheck` |
 | `typecheck` | `compileJava` / `classes` |
-| `validate-specs` | `validateSpecs` (custom task checking anchors and `include::` directives) |
+| `validate-specs` | `validateSpecs` (an `Exec` task running `.agents/skills/spec-system/bin/validate-specs`) |
 
 ## Test Pyramid Tooling
 
@@ -30,3 +30,21 @@
 
 - `System.out.println` / `System.err.println`, `printStackTrace()`
 - Unused imports, commented-out code
+
+## Release
+
+- `version`: `./gradlew -q properties --property version | sed 's/^version: //'`; the version is `version` in `build.gradle.kts` or `gradle.properties`.
+- `dist`: `./gradlew assemble`, then copy `build/libs/*.jar` to `dist/`.
+
+Release Build steps:
+
+```yaml
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew check
+      - run: test "$(./gradlew -q properties --property version | sed 's/^version: //')" = "${{ needs.verify.outputs.version }}"
+      - run: ./gradlew assemble && mkdir -p dist && cp build/libs/*.jar dist/
+```

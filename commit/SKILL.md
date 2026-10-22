@@ -32,7 +32,7 @@ Record one finished unit of work (a user story, a defect fix or a specification 
   | `refactor` | code restructured, behaviour unchanged |
   | `test` | tests only |
   | `docs` | specification, release notes or other documentation only |
-  | `chore` | tooling, dependencies, templates, `.gitignore`, project files |
+  | `chore` | tooling, dependencies, templates, `.gitignore`, project files; `chore(release): <version>` for a release (see [release](../release/SKILL.md)) |
 
 - **scope** (optional, lower case): the module or area; use the scopes listed in `AGENTS.md`, plus `spec` and `agents` (this skill library).
 - **`!`** after the scope marks a breaking change: a removed or renamed setting, command or file path, or a changed default the operator has to know about. It requires a `BREAKING CHANGE:` footer.

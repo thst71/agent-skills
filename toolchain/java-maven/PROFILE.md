@@ -14,7 +14,7 @@
 | `lint` | `mvn -B checkstyle:check spotbugs:check` (or whatever analysis the `pom.xml` binds) |
 | `format-check` | `mvn -B spotless:check` |
 | `typecheck` | `mvn -B compile` |
-| `validate-specs` | `mvn -B -q exec:java@validate-specs` (an `exec-maven-plugin` execution bound to `verify`) |
+| `validate-specs` | `mvn -B -q exec:exec@validate-specs` (an `exec-maven-plugin` execution running `.agents/skills/spec-system/bin/validate-specs`, bound to `verify`) |
 
 ## Test Pyramid Tooling
 
@@ -29,3 +29,21 @@
 
 - `System.out.println` / `System.err.println`, `printStackTrace()`
 - Unused imports, commented-out code
+
+## Release
+
+- `version`: `mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout`; the version is `<version>` in `pom.xml`.
+- `dist`: `mvn -B package -DskipTests`, then copy `target/*.jar` to `dist/`.
+
+Release Build steps:
+
+```yaml
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - run: mvn -B verify
+      - run: test "$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)" = "${{ needs.verify.outputs.version }}"
+      - run: mkdir -p dist && cp target/*.jar dist/
+```

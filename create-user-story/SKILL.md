@@ -19,7 +19,7 @@ Create implementable, atomic user stories with structured test pyramid criteria 
 1. **Target Chapter**: Locate the existing chapter folder in `specification/backlog/` or create a new one (e.g. `specification/backlog/02-combat/`) with an `index.adoc` holding the `==` heading.
 2. **Include Registration**: Create the item file `<ID>-<slug>.adoc` (e.g. `US-2.1-attack-order.adoc`) and add `include::<ID>-<slug>.adoc[]` to the chapter `index.adoc`. For a new chapter, add `include::specification/backlog/<NN-chapter>/index.adoc[]` to `backlog-web.adoc`.
 3. **SMART Story Format**:
-   - Story Anchor (e.g., `[#US-2.1]`)
+   - Story Anchor (e.g., `[[US-2.1]]`)
    - Narrative: *As a... I want to... So that...*
    - Traceability Links: Reference Tech Spec (`<<TS-2.1>>`) and Requirement (`<<FR-2.1>>`).
    - Acceptance Criteria (numbered, testable).

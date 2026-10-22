@@ -27,7 +27,7 @@ To keep the context small, every item lives in its own file.
 
 - A master includes each chapter as `include::specification/<folder>/<NN-chapter>/index.adoc[]`.
 - A chapter `index.adoc` holds the `==` heading, the chapter intro and one `include::<ID>-<slug>.adoc[]` per item (paths relative to the index).
-- An item file starts with its anchor (`[#FR-2.1]`) followed by its `===` heading.
+- An item file starts with its anchor `[[FR-2.1]]` followed by its `===` heading. Never the shorthand `[#FR-2.1]`: Asciidoctor reads the dot as a role and gives FR-2.1 and FR-2.2 the same id `FR-2`.
 - A new item gets its own file plus an include line in the chapter index; a new chapter gets a folder, an `index.adoc` and an include in the master.
 
 ## Reading
@@ -54,6 +54,13 @@ Every requirement and user story is:
 - Every change to an artifact needs an impact analysis on the artifacts upstream and downstream.
 - The `validate-specs` task (see [toolchain](../toolchain/SKILL.md)) checks includes, unique anchors, references and traceability.
 
+## Validator
+
+- The `validate-specs` task runs [spec-validator](https://github.com/thst71/spec-validator) through the launcher `bin/validate-specs` (`bin/validate-specs.ps1` on Windows): it downloads the release pinned in `bin/VERSION` once into the user cache, verifies it against `bin/checksums.txt` and runs it from the project root.
+- Exit code 0: valid; 1: problems, one per line; 2: usage or configuration error.
+- A project with a different layout (masters, folders, anchor kinds, traceability rules) describes it in `.spec-validator.json` in its root; see the validator's README.
+- `SPEC_VALIDATOR=<path>` runs another binary, e.g. a development build.
+
 ## Test Pyramid
 
 User stories name the levels that apply. The tooling per level is in the component's toolchain profile; project-specific limits (e.g. manual runs on real hardware) are in `AGENTS.md`.
@@ -68,3 +75,13 @@ User stories name the levels that apply. The tooling per level is in the compone
 ## Release Notes
 
 `specification/release-notes/<version>.adoc` lists Features, Fixes and Breaking Changes, each with its traced items (`<<US-x.y>>`, `<<FR-x.y>>`). A new version gets its own file and an include in `release-notes.adoc`, newest first.
+
+- Until the release, the file's heading is `== <version> (unreleased)`; the [release](../release/SKILL.md) skill replaces it with `== <version> (YYYY-MM-DD)`. The release pipeline refuses notes without a date.
+- The first change after a release creates the file of the next version.
+
+## Rendering
+
+Every release attaches each master as one HTML file (images and diagrams embedded) plus a zip of all of them. References to items of another master become links between these files. Asciidoctor fails the release on any warning or unresolved reference, so:
+
+- Write literal references in running text as passthrough: `` `+<<ID>>+` ``. Inside plain backticks, `<<ID>>` is still a reference.
+- Diagrams use asciidoctor-diagram (PlantUML, Graphviz, …); they render in the pipeline without extra setup.

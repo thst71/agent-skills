@@ -24,5 +24,5 @@ Map functional and non-functional requirements to technical architecture and sch
    - State and data schemas
    - interface definitions and contracts
    - Component interactions / sequence
-5. **Draft Section**: Write the specification section into the item file with unique anchor (e.g. `[#TS-2.1]`).
+5. **Draft Section**: Write the specification section into the item file with unique anchor (e.g. `[[TS-2.1]]`).
 6. **Verify**: Run the `validate-specs` task (see [toolchain](../toolchain/SKILL.md)).

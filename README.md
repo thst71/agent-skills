@@ -18,6 +18,10 @@ Lookup: `AGENTS.md` → workflow skill → method / toolchain → profile, each 
 
 Workflows never name commands, only tasks: `check`, `test`, `lint`, `format-check`, `typecheck`, `validate-specs`. Each project exposes them through its task runner; see [toolchain](toolchain/SKILL.md).
 
+## Releases
+
+Every project releases the same way, offline: the user signs an annotated tag `v<semver>` and pushes it; the pipeline of [release-actions](https://github.com/thst71/release-actions) verifies the signature against the repository's environment secret, runs the gate, builds the artifacts, renders each specification master as one HTML file and publishes the release with the dated release notes. Other tag names stay free for other uses. See the [release](release/SKILL.md) skill for the procedure, the workflow template and the one-time repository setup.
+
 ## Precedence
 
 The project's `AGENTS.md` comes first, then this library, then the user's personal instructions and skills (`~/.claude/skills`, `~/.agents/`). Personal files may cover the machine environment and how to communicate, never a project rule. For that reason the library is not linked into `.claude/skills/`: a personal skill of the same name would win there.
@@ -29,7 +33,7 @@ git subtree add  --prefix .agents/skills git@github.com:thst71/agent-skills.git 
 git subtree pull --prefix .agents/skills git@github.com:thst71/agent-skills.git main --squash
 ```
 
-Then write the project's `AGENTS.md`: what the project is, a skill table linking `.agents/skills/<skill>/SKILL.md`, the precedence rule, the components with their toolchain profiles, test limits and commit scopes.
+Then write the project's `AGENTS.md`: what the project is, a skill table linking `.agents/skills/<skill>/SKILL.md`, the precedence rule, the components with their toolchain profiles, test limits and commit scopes. Adopt the release workflow as the [release](release/SKILL.md) skill describes.
 
 Do not edit the vendored files for one project; adapt in `AGENTS.md`. A change that is right for every project goes into this repository.
 
