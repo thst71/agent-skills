@@ -22,6 +22,10 @@ Workflows never name commands, only tasks: `check`, `test`, `lint`, `format-chec
 
 Every project releases the same way, offline: the user signs an annotated tag `v<semver>` and pushes it; the pipeline of [release-actions](https://github.com/thst71/release-actions) verifies the signature against the repository's environment secret, runs the gate, builds the artifacts, renders each specification master as one HTML file and publishes the release with the dated release notes. Other tag names stay free for other uses. See the [release](release/SKILL.md) skill for the procedure, the workflow template and the one-time repository setup.
 
+## Versions
+
+The library itself has no release pipeline: a version is a signed, annotated tag `v<semver>` whose message lists the changes since the previous tag. Projects pull a version with `git subtree pull --prefix .agents/skills <url> v<semver> --squash`.
+
 ## Precedence
 
 The project's `AGENTS.md` comes first, then this library, then the user's personal instructions and skills (`~/.claude/skills`, `~/.agents/`). Personal files may cover the machine environment and how to communicate, never a project rule. For that reason the library is not linked into `.claude/skills/`: a personal skill of the same name would win there.
