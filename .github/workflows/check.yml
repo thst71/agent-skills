@@ -24,5 +24,5 @@ jobs:
           exit $rc
       - name: Shell scripts pass shellcheck
         run: |
-          files=$(grep -rlE '^#!/bin/(ba)?sh' --exclude-dir=.git . || true)
+          files=$(grep -rlE '^#!(/bin/|/usr/bin/env )(ba)?sh' --exclude-dir=.git . || true)
           if [ -n "$files" ]; then shellcheck $files; fi
