@@ -45,7 +45,59 @@ Every requirement and user story is:
 - **Measurable**: acceptance criteria are testable and verifiable.
 - **Achievable**: implementable within the project's stack.
 - **Relevant**: traceable to a stakeholder need or a parent requirement.
-- **Time-bound**: includes an effort estimate.
+- **Time-bound**: includes an effort estimate (`Effort::`).
+
+## Item Templates
+
+Requirement (`Stakeholder need::` is a constraint instead where there is no need behind it):
+
+```asciidoc
+[[FR-2.1]]
+=== FR-2.1 Attack order
+
+The system shall <one statement>.
+
+.Acceptance criteria
+. <verifiable condition>
+
+Stakeholder need:: SPEC.md §2.1 +
+Effort:: 2 h
+```
+
+Technical specification:
+
+```asciidoc
+[[TS-2.1]]
+=== TS-2.1 Attack planner
+
+Implements <<FR-2.1>> and <<NFR-3>>.
+
+<architecture, data model, interface definitions, interactions>
+```
+
+User story (a test level that does not apply says why, e.g. `* Blackbox test: none, no user journey`):
+
+```asciidoc
+[[US-2.1]]
+=== US-2.1 Plan the attack order
+
+Effort:: 4 h +
+Traces to:: <<TS-2.1>>, <<FR-2.1>>
+
+As a <role>, I want <goal>, so that <benefit>.
+
+.Acceptance criteria
+. <testable condition>
+
+.Technical tasks
+. <implementation step>
+
+.Test criteria
+* Unit test: <functions, validators, services and what they must show>
+* Component test: <rendered or isolated modules, interactions>
+* Integration test: <persistence, service chains>
+* Blackbox test: <critical user journey>
+```
 
 ## Traceability
 
