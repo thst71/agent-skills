@@ -25,6 +25,7 @@ To keep the context small, every item lives in its own file.
 | Release notes | `release-notes.adoc` | `specification/release-notes/<version>.adoc` | – |
 | Stakeholder input | `SPEC.md` (index only) | `specification/stakeholder/<NN>-<topic>.md` | `SPEC.md §n` = file `<NN>` |
 
+- The master names above are the default layout of the validator; a project that names them differently configures them in `.spec-validator.json` (see Validator). The other skills say "the master" of a kind and mean these files.
 - A master includes each chapter as `include::specification/<folder>/<NN-chapter>/index.adoc[]`.
 - A chapter `index.adoc` holds the `==` heading, the chapter intro and one `include::<ID>-<slug>.adoc[]` per item (paths relative to the index).
 - An item file starts with its anchor `[[FR-2.1]]` followed by its `===` heading. Never the shorthand `[#FR-2.1]`: Asciidoctor reads the dot as a role and gives FR-2.1 and FR-2.2 the same id `FR-2`.
