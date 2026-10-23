@@ -24,7 +24,7 @@ Every project releases the same way, offline: the user signs an annotated tag `v
 
 ## Versions
 
-The library itself has no release pipeline: a version is a signed, annotated tag `v<semver>` whose message lists the changes since the previous tag. `vendor.sh` writes the vendored version into `.agents/skills/VERSION`; release notes name it ("Built with agent-skills v0.2.0.").
+The library itself has no release pipeline: a version is a signed, annotated tag `v<semver>` whose message lists the changes since the previous tag. `vendor.sh` writes the vendored version into `.agents/skills/VERSION`; release notes name it ("Built with agent-skills v0.3.0.").
 
 ## Precedence
 
@@ -36,10 +36,10 @@ Once per machine, trust the maintainer's signing key: `~/.agents/allowed_signers
 
 ```sh
 # first time: from a checkout of this repository
-sh /path/to/agent-skills/vendor.sh v0.2.0
+sh /path/to/agent-skills/vendor.sh v0.3.0
 # later updates: the vendored copy updates itself
-.agents/skills/vendor.sh v0.3.0
-git commit -m "chore(agents): vendor agent-skills v0.3.0"
+.agents/skills/vendor.sh v0.4.0
+git commit -m "chore(agents): vendor agent-skills v0.4.0"
 ```
 
 `vendor.sh` clones the tag, refuses it unless its SSH signature is by an allowed signer who is the tagger, replaces `.agents/skills/` with the tag's content (without `.github/`) and stages the result, so that every update is one signed, linear commit. A project that used `git subtree` before switches by running it once.
