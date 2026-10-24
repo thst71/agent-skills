@@ -21,7 +21,7 @@ Run once per project, after the user decided that its blackbox level is requirem
 ## Execution Steps
 
 1. **Decision**: Confirm with the user that the blackbox level becomes requirements-based. Do not adopt BDT on your own.
-2. **Validator**: If `.agents/spec-validator.lock` pins a version below 0.2.1 (0.2.0 was never published), ask the user to update it, then run `.agents/skills/spec-system/bin/validate-specs --update v<version>` with the version the user chose, at least `v0.2.1`; without a version the launcher takes the highest tag, which need not be a published release (see [spec-system](../spec-system/SKILL.md), Validator) and commit the lock on its own.
+2. **Validator**: If `.agents/spec-validator.lock` pins a version below 0.2.1 (0.2.0 was never published), ask the user to update it, then run `.agents/skills/spec-system/bin/validate-specs --update v<version>` with the version the user chose, at least `v0.2.1` (see [spec-system](../spec-system/SKILL.md), Validator), and commit the lock on its own.
 3. **Configuration**: Write `.spec-validator.json` with the default layout of [spec-system](../spec-system/SKILL.md) (or the project's own) plus the test kind `{"kind": "AT", "folder": "specification/acceptance", "format": "gherkin", "traces": ["FR", "NFR"]}`. Run the `validate-specs` task.
 4. **Tooling**: Set up the runner of the component's toolchain profile (section BDT): dependencies, configuration, step definitions folder and the `bdt` task writing `build/bdt/cucumber.json`. A profile without a BDT section: stop and tell the user; do not invent one.
 5. **First Scenarios**: Write scenarios for one existing requirement with [create-acceptance-scenarios](../create-acceptance-scenarios/SKILL.md) and run the `bdt` task until they pass.

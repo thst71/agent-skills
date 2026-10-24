@@ -111,7 +111,7 @@ As a <role>, I want <goal>, so that <benefit>.
 ## Validator
 
 - The `validate-specs` task runs [spec-validator](https://github.com/thst71/spec-validator) through the launcher `bin/validate-specs` (`bin/validate-specs.ps1` on Windows), from the project root. The project pins the release in `.agents/spec-validator.lock` (version and archive checksums, checked in). The launcher runs an installed `spec-validator` whose `-version` is exactly the pinned version; otherwise it downloads the release once into the user cache and verifies it against the lock.
-- `bin/validate-specs --update [v<version>]` pins a release (default: the latest): it refuses a tag that is not signed by an allowed signer of `~/.agents/allowed_signers`, writes the lock from the release's checksums and stages it. Commit it as `chore: spec-validator <version>`. Update the pin only when the user asks for it; a stricter validator then shows up in that commit, not in an unrelated one.
+- `bin/validate-specs --update [v<version>]` pins a release (default: the latest release; tags without a release are skipped): it refuses a tag that is not signed by an allowed signer of `~/.agents/allowed_signers`, writes the lock from the release's checksums and stages it. Commit it as `chore: spec-validator <version>`. Update the pin only when the user asks for it; a stricter validator then shows up in that commit, not in an unrelated one.
 - Exit code 0: valid; 1: problems, one per line; 2: usage or configuration error.
 - A project with a different layout (masters, folders, anchor kinds, traceability rules) describes it in `.spec-validator.json` in its root; see the validator's README.
 - `SPEC_VALIDATOR=<path>` runs another binary, e.g. a development build.

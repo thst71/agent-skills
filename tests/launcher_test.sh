@@ -99,6 +99,13 @@ check "bad version" 2 "usage: validate-specs --update" "$launcher" --update 1.2.
 check "missing signers" 2 "no allowed signers in" env SPEC_VALIDATOR_SIGNERS="$work/none" "$launcher" --update v1.2.3
 [[ ! -e "$lock" ]] || { echo "FAIL refused updates left a lock"; failures=$((failures + 1)); }
 
+# The latest is the newest tag with a release: v1.2.4 (signed, no release yet) is skipped.
+git -C "$work/source" push -q "$work/srv/spec-validator.git" v1.2.4
+check "latest skips a tag without release" 0 "skipping v1.2.4, it has no release" "$launcher" --update
+grep -q '^version 1.2.3$' "$lock" || { echo "FAIL skipped tag pinned: $(cat "$lock")"; failures=$((failures + 1)); }
+git -C "$work/source" push -q --delete "$work/srv/spec-validator.git" v1.2.4
+git -C "$work/project" rm -q --cached .agents/spec-validator.lock && rm "$lock"
+check "no release at all" 2 "no release found in" env SPEC_VALIDATOR_BASE_URL="file://$work/nowhere" "$launcher" --update
 check "update to latest" 0 "pinned spec-validator 1.2.3 (was none), signed by me@example.org" "$launcher" --update
 expected="# spec-validator pin, written by: .agents/skills/spec-system/bin/validate-specs --update
 version 1.2.3
