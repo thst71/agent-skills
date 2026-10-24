@@ -26,3 +26,5 @@ jobs:
         run: |
           files=$(grep -rlE '^#!(/bin/|/usr/bin/env )(ba)?sh' --exclude-dir=.git . || true)
           if [ -n "$files" ]; then shellcheck $files; fi
+      - name: Validator launcher
+        run: bash tests/launcher_test.sh
