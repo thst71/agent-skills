@@ -20,7 +20,7 @@ Workflows never name commands, only tasks: `check`, `test`, `lint`, `format-chec
 
 ## Requirements-Based Blackbox Testing
 
-A project may decide that its blackbox level is requirements-based (BDT): acceptance scenarios in Gherkin feature files trace to its requirements, run on pull requests and releases, and every release carries a test report and a traceability report. The [bdt-adopt](bdt-adopt/SKILL.md) skill turns it on; [spec-system](spec-system/SKILL.md) holds the rules, the toolchain profiles the runners (playwright-bdd for node-npm, pytest-bdd for the Python profiles). Without the decision, nothing of it applies.
+A project may decide that its blackbox level is requirements-based (BDT): acceptance scenarios in Gherkin feature files trace to its requirements, run on pull requests and releases, and every release carries a test report and a traceability report. The [bdt-adopt](bdt-adopt/SKILL.md) skill turns it on; [spec-system](spec-system/SKILL.md) holds the rules, the toolchain profiles the runners (playwright-bdd for node-npm, pytest-bdd for the Python profiles, godog for go-task). Without the decision, nothing of it applies.
 
 ## Releases
 
