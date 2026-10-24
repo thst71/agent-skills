@@ -13,13 +13,14 @@
   "lint": "eslint . --max-warnings 0",
   "format-check": "prettier --check src",
   "typecheck": "tsc --noEmit",
-  "test": "vitest run",
+  "test": "vitest run --coverage",
   "validate-specs": ".agents/skills/spec-system/bin/validate-specs",
   "check": "npm run lint && npm run format-check && npm run typecheck && npm run test && npm run validate-specs"
 }
 ```
 
-- `test` runs once; keep the watch mode under another name (e.g. `test:watch`).
+- `test` runs once and always measures coverage; keep the watch mode under another name (e.g. `test:watch`). There is no separate coverage script or pipeline step.
+- `coverage.thresholds` in the Vitest configuration make coverage part of the gate: set them to today's values, rounded down, raise them when coverage grows and never lower them to make a change pass. ESLint ignores the `coverage/` output.
 - `--max-warnings 0` makes lint warnings fail the gate, as the [definition-of-done](../../definition-of-done/SKILL.md) demands.
 - A component below the project root calls the launcher with a relative path and passes the root: `../.agents/skills/spec-system/bin/validate-specs ..`.
 - `version` is an npm lifecycle script; do not define a script of that name (see Release).
@@ -49,7 +50,8 @@
 
 ## Release
 
-- `version`: `node -p "require('./package.json').version"`; the version is `version` in `package.json`. A project that takes the version from the tag instead (e.g. injected at build time) has no `version` task and says so in `AGENTS.md`.
+- `version`: `node -p "require('./package.json').version"`; the version is `version` in `package.json`.
+- A project that takes the version from the tag instead (e.g. injected at build time) has no `version` task and leaves `version` in `package.json` as it is: it is not maintained, and the release does not compare it. `package.json` cannot hold a comment, so `AGENTS.md` says so.
 - `dist`: a package runs `npm pack --pack-destination dist`; a web app archives its build (`tar -czf dist/<name>-<version>.tar.gz -C build .`). An app delivered as a container image has no `dist`; its image is built in the workflow (see [release](../../release/SKILL.md), Adoption).
 
 Release Build steps:
