@@ -12,7 +12,7 @@ Run once per project, after the user decided that its blackbox level is requirem
 
 - `AGENTS.md` (Testing, the BDT skills)
 - `.spec-validator.json` (test kind `AT`)
-- `.agents/spec-validator.lock` (spec-validator 0.2.0 or later)
+- `.agents/spec-validator.lock` (spec-validator 0.2.1 or later)
 - `specification/acceptance/` (first feature file)
 - The task definitions and test setup of the component (the `bdt` task of its toolchain profile)
 - `.gitignore` (generated reports and results)
@@ -21,7 +21,7 @@ Run once per project, after the user decided that its blackbox level is requirem
 ## Execution Steps
 
 1. **Decision**: Confirm with the user that the blackbox level becomes requirements-based. Do not adopt BDT on your own.
-2. **Validator**: If `.agents/spec-validator.lock` pins a version below 0.2.0, ask the user to update it, then run `.agents/skills/spec-system/bin/validate-specs --update` (see [spec-system](../spec-system/SKILL.md), Validator) and commit the lock on its own.
+2. **Validator**: If `.agents/spec-validator.lock` pins a version below 0.2.1 (0.2.0 was never published), ask the user to update it, then run `.agents/skills/spec-system/bin/validate-specs --update` (see [spec-system](../spec-system/SKILL.md), Validator) and commit the lock on its own.
 3. **Configuration**: Write `.spec-validator.json` with the default layout of [spec-system](../spec-system/SKILL.md) (or the project's own) plus the test kind `{"kind": "AT", "folder": "specification/acceptance", "format": "gherkin", "traces": ["FR", "NFR"]}`. Run the `validate-specs` task.
 4. **Tooling**: Set up the runner of the component's toolchain profile (section BDT): dependencies, configuration, step definitions folder and the `bdt` task writing `build/bdt/cucumber.json`. A profile without a BDT section: stop and tell the user; do not invent one.
 5. **First Scenarios**: Write scenarios for one existing requirement with [create-acceptance-scenarios](../create-acceptance-scenarios/SKILL.md) and run the `bdt` task until they pass.
