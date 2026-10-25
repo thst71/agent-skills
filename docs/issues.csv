@@ -1,0 +1,118 @@
+id,repository,type,title,labels,milestone,depends_on,body
+AS-1,thst71/agent-skills,Feature,Agent roles per generation step,roles;skills,,,"## Context
+
+The user's ""next big change"": every generation step from the stakeholder input down to the implementation gets an agent role, so a step no longer needs the full context of all document levels. v0.8.0 prepared it: every level skill names what it reads (`## Reads`), and the review gates stop between the levels.
+
+## Idea
+
+- One role per level: requirements (SPEC → FR/NFR), acceptance (FR → AT), architecture (check, LF, ADR), technical specification (FR/NFR → TS), stories (TS → US), implementation (US → code and tests).
+- A role gets only what its skill's `Reads` names, plus the items it works on.
+- The hand-over between roles is the review gate: the output of one level, reviewed, is the input of the next.
+
+## Open Questions
+
+- Where are roles defined: in the skills, in a separate role file, or in the project's `AGENTS.md`?
+- How does a role refuse work outside its level (e.g. a TS role that finds a missing requirement)? Today `update-requirement` stops after the impact report; the role would hand back the same way.
+- Does a role need a model or effort hint, or is that the harness's business?
+
+## Done When
+
+- Every level skill names its role and its hand-over.
+- The README user's guide shows a feature going through the roles.
+- Tried end to end in one project (wos-intel or project-template)."
+AS-2,thst71/spec-validator,Feature,Reverse traceability rule: every item of a kind is referenced,validator;architecture,,,"## Context
+
+Traceability rules check ""every X references a Y"". The architecture overview needs the other direction: every functional requirement is served by at least one logical function (`LF-n` references `FR-x.y`). spec-system says the validator does not check it yet; `update-architecture` checks it by hand.
+
+## Idea
+
+A rule form for ""every Y is referenced by an X"", e.g. `{""kind"": ""FR"", ""referencedBy"": [""LF""], ""name"": ""function""}`, reported like the existing rules (`FR-2.1 is served by no function`). Off unless configured.
+
+## Done When
+
+- The rule is in the config schema, the FR and the tests of spec-validator.
+- Released; the release notes name the rule."
+AS-3,thst71/agent-skills,Task,Use the reverse traceability rule for the architecture coverage check,spec-system;architecture,,AS-2,"## Context
+
+Once spec-validator has the reverse rule (AS-2), the coverage check ""every FR is served by a function"" can move from `update-architecture` into the validator.
+
+## Done When
+
+- spec-system ""Architecture Overview / Validation"" lists the rule; the sentence ""does not yet check"" is gone.
+- `architecture-adopt` adds the rule to `.spec-validator.json`; `update-architecture` relies on the validator instead of checking by hand.
+- The tag message names the change under ""Affects projects"" (raise the lock, add the rule)."
+AS-4,thst71/spec-validator,Feature,Durations in the test report,validator;testing;bdt,,,"## Context
+
+Since agent-skills v0.8.0 every test run records the execution time of every test. The BDT test report (`-test-report`, Cucumber JSON → AsciiDoc) doesn't show them yet, although the Cucumber JSON holds a duration per step (nanoseconds).
+
+## Idea
+
+The report shows the duration per scenario (sum of its steps) and the total; optionally the slowest scenarios at the top.
+
+## Done When
+
+- The test report of a release shows the durations; FR and tests updated; released."
+AS-5,thst71/agent-skills,Feature,Manual tests (MT) as a test kind,bdt;testing;spec-system,,,"## Context
+
+Some requirements can only be accepted by hand: in wos-intel, runs against the real device. spec-validator's config already has a list of test kinds, so manual tests were planned from the start of BDT.
+
+## Idea
+
+- An MT item: preconditions, steps, expected results, traced to FR/NFR like an AT.
+- A record of each execution (date, version, who, result) that the test report and the traceability report include.
+
+## Open Questions
+
+- Format: Gherkin with a tag, or AsciiDoc items?
+- Where does the execution record live, and does a release require a recent one?
+- Does spec-validator need changes beyond the test-kind list?"
+AS-6,thst71/agent-skills,Task,Blackbox tests with a fake at the process boundary,bdt;testing,,,"## Context
+
+A product that drives an external program or device (wos-intel drives the game through `adb`) has no blackbox scenarios for its main loop: the run needs the device. wos-intel can configure the path of its tool (`device.adb_path`), so a scripted fake executable would allow scenarios for the run loop without a device.
+
+## Idea
+
+`bdt-adopt` (or the testing guidance) describes the pattern: the product stays a separate process; the external program is replaced by a fake executable on the configured path, scripted per scenario. The fake lives with the tests, never in the shipped configuration.
+
+## Done When
+
+- The pattern is described once, language-independent; the profiles show how a fake executable is provided.
+- Tried in wos-intel (its own story there)."
+AS-7,thst71/agent-skills,Task,Guidance on test doubles for deterministic collaborators,testing,,,"## Context
+
+wos-intel's run-loop tests were slow because each look of the fake game ran the full detection. Two fixes were weighed (see docs/design-notes.md, ""Testing""):
+
+- a cache keyed by the input content: little code, the real collaborator stays in the test;
+- mocks plus a contract table checked against the real collaborator: clean layering, more maintenance.
+
+Mocks without a contract can drift from the real behaviour wherever no test checks the mocked value.
+
+## Idea
+
+A short rule in the testing guidance: measure first; for a deterministic, expensive collaborator prefer a content-keyed cache; use mocks only with a contract that is checked against the real thing.
+
+## Done When
+
+- The rule is in one place (toolchain or a test skill), language-independent."
+AS-8,thst71/spec-validator,Feature,Recognise anchors inside table cells,validator,,,"## Context
+
+spec-validator recognises an anchor (`[[ID]]`) only when it stands alone on a line. In a table cell it has to go on its own line, which spec-system now documents. The architecture's function table and allocation matrix hit this.
+
+## Idea
+
+Recognise anchors at the start of an AsciiDoc table cell (`| [[LF-1]] Observe`), or decide that the current rule stays and close this.
+
+## Done When
+
+- Decided; if implemented, the spec-system rule is relaxed in the next library version."
+AS-9,thst71/agent-skills,Task,Import docs/issues.csv into a GitHub project,tooling,,,"## Context
+
+Open ideas are kept in docs/issues.csv until the library uses GitHub issues. Each row holds what an issue needs: repository, type, title, labels, milestone, dependencies and the body.
+
+## Idea
+
+A script that creates the issues with `gh issue create` in the row's repository, adds them to a GitHub project, links `depends_on` as sub-issues or references, and writes the issue URLs back (or prints them), so the CSV can be retired.
+
+## Done When
+
+- All rows exist as issues; the CSV is removed or marked as imported."
