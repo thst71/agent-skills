@@ -17,6 +17,8 @@
 | `typecheck` | `compileJava` / `classes` |
 | `validate-specs` | `validateSpecs` (an `Exec` task running `.agents/skills/spec-system/bin/validate-specs`) |
 
+- Test durations: every test task writes the time of every test to `build/test-results/<task>/` (`TEST-*.xml`) and `build/reports/tests/<task>/` by default; do not switch the reports off.
+
 ## Test Pyramid Tooling
 
 | Level | Tooling | Run one level |

@@ -16,6 +16,8 @@
 | `typecheck` | `mvn -B compile` |
 | `validate-specs` | `mvn -B -q exec:exec@validate-specs` (an `exec-maven-plugin` execution running `.agents/skills/spec-system/bin/validate-specs`, bound to `verify`) |
 
+- Test durations: Surefire and Failsafe write the time of every test to `target/surefire-reports/` and `target/failsafe-reports/` (`TEST-*.xml`) by default; do not switch the reports off.
+
 ## Test Pyramid Tooling
 
 | Level | Tooling | Run one level |
