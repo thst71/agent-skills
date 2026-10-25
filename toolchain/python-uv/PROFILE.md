@@ -19,6 +19,7 @@ check = ["lint", "format-check", "typecheck", "test", "validate-specs"]
 ```
 
 - Coverage runs with the tests: `pytest-cov` and `addopts = ["--strict-markers", "--cov=<package>", "--cov-fail-under=<n>"]`; set `<n>` to today's value, rounded down, raise it when coverage grows and never lower it to make a change pass. Code that runs only as a separate process (`__main__.py`) is omitted under `[tool.coverage.run]`.
+- Ruff leaves out the vendored library: `extend-exclude = [".agents"]` under `[tool.ruff]`. Recent ruff versions also format the Python examples in Markdown files, and the library is not the project's code.
 
 ## Test Pyramid Tooling
 
@@ -42,6 +43,7 @@ Only for requirements-based blackbox testing (see [spec-system](../../spec-syste
 
 ```python
 _ID = re.compile(r"[A-Z][A-Z0-9]*-\d+(\.\d+)*")
+
 
 def pytest_bdd_apply_tag(tag: str, function: Callable[..., Any]) -> bool | None:
     return True if _ID.fullmatch(tag) else None
