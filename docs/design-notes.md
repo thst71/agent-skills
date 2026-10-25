@@ -12,7 +12,7 @@ The file is for developing the library and is not vendored into projects (`expor
 - **Versions are signed tags only**, created and pushed by the user. The library has no release pipeline and no release notes; the tag message lists the changes and what they mean for projects ("Affects projects").
 - **The validator pin is per project** (`.agents/spec-validator.lock`, changed with `validate-specs --update`). It used to be in the library, which forced a library release for every validator release.
 - **Pins are not raised for docs-only releases.** Otherwise a pin raise needs a vendor, the vendor a release, and that release another pin raise. A pin moves only for a feature or fix the project needs; vendoring never forces a release.
-- **A tag without a release is never pinned.** spec-validator v0.2.0 is such a tag (its docs job failed; v0.2.1 published the features). Since v0.6.1, `--update` without a version takes the newest tag that has a release.
+- **A tag without a release is never pinned.** spec-validator v0.2.0 is such a tag (its docs job failed on a literal reference that wasn't passthrough; v0.2.1 published the features). Since v0.6.1, `--update` without a version takes the newest tag that has a release.
 
 ## Levels of the Specification
 
@@ -46,13 +46,28 @@ The rules are in [spec-system](../spec-system/SKILL.md) under "Levels and Alloca
 - **Slow tests: measure first.** The wos-intel run-loop tests took 351 s because every look of the fake game ran the full detection. A cache keyed by the image content brought it to 44 s.
 - **Cache or mock.** Mocked detection results would make flow a clean component test, but the mocks can drift from the real detection wherever no detection test checks the mocked value. A contract table (expected results per screen, checked against the real detection and served as the mock) closes that gap. The user chose the cache: the table is too much maintenance for the gain. Without the contract, mocks of a deterministic collaborator are the riskier choice.
 
+## BDT Runners
+
+- **Cucumber JSON differs per runner**, so spec-validator matches results by the test ID only:
+  - playwright-bdd: tags with `@`, relative URIs;
+  - pytest-bdd: tags without `@`, URIs relative to the features folder;
+  - godog: tags with `@`, the feature's tags on every scenario, URIs `../…`;
+  - Cucumber-JVM 8: tags with `@`, URIs `file:specification/…`.
+- Cucumber-JVM 8's `json` plugin needs a JSON library (jackson-databind) on the test classpath.
+- **Profiles name tools, not versions; project-template pins the versions.** google-java-format 1.37.0 fails inside Spotless 3.10.4 (InvocationTargetException on JDK 21 and 27), so the template pins 1.36.1.
+- google_checks.xml allows no `_` in packages, so the template package is `app.<name without ->`. It counts the suffix `IT` as an abbreviation, so blackbox and BDT classes are named `…Test`, live in their own packages and are excluded from Surefire.
+- project-template's CI found both Gradle profile faults of v0.6.0, but only after the tag (see AS-10).
+
 ## Pitfalls Seen
 
+- A literal `<<ID>>` inside plain backticks is still a reference; asciidoctor with failure level INFO fails on it. Write `` `+<<ID>>+` ``.
 - spec-validator recognises an anchor only alone on a line; in a table cell it goes on its own line.
 - Rendering needs the BDT reports first, because the masters link to AT items.
 - ruff formats Python code blocks in Markdown, so the vendored library needs `.agents` in `extend-exclude` and the profile examples must be formatted.
 - PlantUML underlines `__name__`; escape it as `~_~_name~_~_`.
-- Docker on macOS (Colima) sees only `$HOME`: run the render tests with `TMPDIR` below it.
+- Docker on macOS (Colima) shares only `$HOME`: tests that mount folders use unique directories under `~/.cache`, not `$TMPDIR`, and delete only those. Windows runners have no Linux containers, so Docker tests skip when the OS type isn't linux; golden-file tests compare with CRLF stripped.
+- A YAML plain scalar containing `: ` doesn't parse (the old Gradle version step); run actionlint on the workflow snippets of the profiles.
+- `*.bat` and `*.cmd` (the Gradle and Maven wrappers) need `eol=crlf` in `.gitattributes`; project-template sets it at its root.
 - Homebrew's `task` is Taskwarrior; go-task runs as `go run github.com/go-task/task/v3/cmd/task@latest`.
 
 ## Working with Several Sessions

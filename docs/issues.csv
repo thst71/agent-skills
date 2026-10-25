@@ -116,3 +116,52 @@ A script that creates the issues with `gh issue create` in the row's repository,
 ## Done When
 
 - All rows exist as issues; the CSV is removed or marked as imported."
+AS-10,thst71/agent-skills,Feature,Run the project-template variants against a library branch before tagging,tooling;toolchain,,,"## Context
+
+project-template's CI found both Gradle profile faults of v0.6.0, but only after the tag. Profiles are snippets that only run once a project uses them.
+
+## Idea
+
+Library CI, or a manual pre-tag step, vendors the library branch into the project-template variants and runs their gates. A failure blocks the tag.
+
+## Open Questions
+
+- In library CI (needs project-template checked out and vendoring from a branch, not a signed tag) or as a pre-tag script?
+- Which variants: all, or only those whose profile changed?
+
+## Done When
+
+- A profile fault shows up before the tag; the release procedure of the library names the step."
+AS-11,thst71/agent-skills,Bug,java-maven snippets use mvn instead of the wrapper,toolchain,,,"## Context
+
+The java-maven profile says to use the wrapper `./mvnw` when the project has one, but the task table, the Release Build and the Pull Request steps call `mvn`.
+
+## Done When
+
+- The snippets use `./mvnw` (with `mvn` named as the fallback for projects without a wrapper), consistent with java-gradle's `./gradlew`."
+AS-12,thst71/agent-skills,Task,Java profiles: JUnit 6 instead of JUnit 5,toolchain,,,"## Context
+
+The test tables of java-maven and java-gradle name ""JUnit 5"" for unit, component and integration tests. JUnit 6 is current; project-template uses 6.1.3.
+
+## Done When
+
+- Both profiles name JUnit 6 (or ""JUnit Jupiter"" without a major version, since profiles name tools, not versions)."
+AS-13,thst71/project-template,Feature,Offer the architecture overview as a template variant,architecture,,,"## Context
+
+Since agent-skills v0.8.0 the architecture overview is opt-in (`architecture-adopt`). project-template's variants cover language and BDT, not the architecture.
+
+## Idea
+
+A further variant dimension (e.g. `init.sh <node|python> <bdt|plain> [arch] <name>`) that runs the result of `architecture-adopt`: `architecture-web.adoc`, the kinds ADR and LF in `.spec-validator.json`, the line in `AGENTS.md`.
+
+## Done When
+
+- The variant is generated and green in the template's CI."
+AS-14,thst71/project-template,Task,Vendor agent-skills v0.8.0 into project-template,toolchain;testing,,,"## Context
+
+project-template still vendors v0.7.0. v0.8.0 changes the test commands of the profiles (every test run records its durations).
+
+## Done When
+
+- The template vendors v0.8.0; every variant's test task writes its duration report and ignores `build/`; CI green.
+- Waits for the user's go."
