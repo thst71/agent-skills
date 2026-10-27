@@ -69,6 +69,7 @@ The rules are in [spec-system](../spec-system/SKILL.md) under "Levels and Alloca
 - Docker on macOS (Colima) shares only `$HOME`: tests that mount folders use unique directories under `~/.cache`, not `$TMPDIR`, and delete only those. Windows runners have no Linux containers, so Docker tests skip when the OS type isn't linux; golden-file tests compare with CRLF stripped.
 - A YAML plain scalar containing `: ` doesn't parse (the old Gradle version step); run actionlint on the workflow snippets of the profiles.
 - `*.bat` and `*.cmd` (the Gradle and Maven wrappers) need `eol=crlf` in `.gitattributes`; project-template sets it at its root.
+- A workflow run that fails before it starts (a called workflow GitHub can't resolve) can't be re-run. That happened to v0.9.0: the library PR was merged before the project-template PR its `template` run needed, so the run on `main` failed at startup. Merge such a template change first; `template.yml` has `workflow_dispatch` to run a branch or tag by hand.
 - Homebrew's `task` is Taskwarrior; go-task runs as `go run github.com/go-task/task/v3/cmd/task@latest`.
 
 ## Working with Several Sessions

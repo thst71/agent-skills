@@ -1,12 +1,14 @@
 # Every project-template variant with this commit of the library in place of its vendored one:
 # init, gate, blackbox or BDT tests, reports and rendering. A workflow of its own, so that a fault in
-# the called workflow cannot stop the checks of check.yml.
+# the called workflow cannot stop the checks of check.yml. Started by hand (Actions, "Run workflow"),
+# it runs the chosen branch or tag, e.g. to check a tag whose run on main failed.
 name: template
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
