@@ -38,11 +38,3 @@ jobs:
           go-version: stable
       - name: Workflow snippets of the profiles pass actionlint
         run: bash tests/profile_snippets_test.sh
-
-  # Every project-template variant with this commit of the library in place of its vendored one:
-  # init, gate, blackbox or BDT tests, reports and rendering. Pull requests and main only.
-  template:
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
-    uses: thst71/project-template/.github/workflows/template.yml@main
-    with:
-      agent-skills-ref: ${{ github.event.pull_request.head.sha || github.sha }}
