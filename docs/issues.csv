@@ -132,13 +132,6 @@ Library CI, or a manual pre-tag step, vendors the library branch into the projec
 ## Done When
 
 - A profile fault shows up before the tag; the release procedure of the library names the step."
-AS-12,thst71/agent-skills,Task,Java profiles: JUnit 6 instead of JUnit 5,toolchain,,,"## Context
-
-The test tables of java-maven and java-gradle name ""JUnit 5"" for unit, component and integration tests. JUnit 6 is current; project-template uses 6.1.3.
-
-## Done When
-
-- Both profiles name JUnit 6 (or ""JUnit Jupiter"" without a major version, since profiles name tools, not versions)."
 AS-13,thst71/project-template,Feature,Offer the architecture overview as a template variant,architecture,,,"## Context
 
 Since agent-skills v0.8.0 the architecture overview is opt-in (`architecture-adopt`). project-template's variants cover language and BDT, not the architecture.

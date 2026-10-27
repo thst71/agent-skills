@@ -22,9 +22,9 @@
 
 | Level | Tooling | Run one level |
 |---|---|---|
-| Unit | JUnit 5 + Mockito, via Surefire | `./mvnw -B test` |
-| Component | JUnit 5 + Mockito, one class or package with collaborators mocked | `./mvnw -B test -Dtest='<Pattern>'` |
-| Integration | JUnit 5 + Testcontainers, classes named `*IT.java`, via Failsafe | `./mvnw -B verify -DskipUTs` (if configured) |
+| Unit | JUnit Jupiter + Mockito, via Surefire | `./mvnw -B test` |
+| Component | JUnit Jupiter + Mockito, one class or package with collaborators mocked | `./mvnw -B test -Dtest='<Pattern>'` |
+| Integration | JUnit Jupiter + Testcontainers, classes named `*IT.java`, via Failsafe | `./mvnw -B verify -DskipUTs` (if configured) |
 | Blackbox | REST Assured (API), Selenium/Playwright-Java (UI), in a Maven profile | `./mvnw -B verify -P e2e` |
 
 - Blackbox tests run with Failsafe against the packaged artifact (`integration-test` comes after `package`); the build passes its path as a system property, e.g. `<command.jar>${project.build.directory}/${project.build.finalName}.jar</command.jar>` under `systemPropertyVariables`. Surefire excludes their packages (`**/blackbox/**`, `**/bdt/**`).
