@@ -1,0 +1,18 @@
+# Every project-template variant with this commit of the library in place of its vendored one:
+# init, gate, blackbox or BDT tests, reports and rendering. A workflow of its own, so that a fault in
+# the called workflow cannot stop the checks of check.yml.
+name: template
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  variants:
+    uses: thst71/project-template/.github/workflows/template.yml@main
+    with:
+      agent-skills-ref: ${{ github.event.pull_request.head.sha || github.sha }}
