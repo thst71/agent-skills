@@ -11,8 +11,8 @@ This repository is the agent-skills library itself. Projects vendor it into `.ag
 ## Rules
 
 - The rules for skills are in the README under "Contributing"; commits follow the [commit](commit/SKILL.md) skill with the skill or profile name as scope (`docs` for this file and `docs/`).
-- Changes go through a pull request. CI checks that relative Markdown links resolve, runs shellcheck on the shell scripts and runs `tests/launcher_test.sh`; run the same locally before pushing.
-- Versions are signed tags, created and pushed by the user only. Prepare the tag message: the changes, then "Affects projects" (what a project has to do after vendoring).
+- Changes go through a pull request. CI checks that relative Markdown links resolve, runs shellcheck on the shell scripts, `tests/launcher_test.sh` and `tests/profile_snippets_test.sh` (actionlint on the workflow snippets of the profiles); run the same locally before pushing. On pull requests and on `main`, the job `template` also runs every project-template variant with the library of that commit in place of its vendored version.
+- Versions are signed tags, created and pushed by the user only. Before a tag, the check run of the commit to tag (on `main`) must pass, the job `template` included. Prepare the tag message: the changes, then "Affects projects" (what a project has to do after vendoring).
 - A skill never names a project. Examples from a project go into the design notes, not into a skill.
 
 ## Keeping the Notes

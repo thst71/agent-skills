@@ -116,22 +116,6 @@ A script that creates the issues with `gh issue create` in the row's repository,
 ## Done When
 
 - All rows exist as issues; the CSV is removed or marked as imported."
-AS-10,thst71/agent-skills,Feature,Run the project-template variants against a library branch before tagging,tooling;toolchain,,,"## Context
-
-project-template's CI found both Gradle profile faults of v0.6.0, but only after the tag. Profiles are snippets that only run once a project uses them.
-
-## Idea
-
-Library CI, or a manual pre-tag step, vendors the library branch into the project-template variants and runs their gates. A failure blocks the tag.
-
-## Open Questions
-
-- In library CI (needs project-template checked out and vendoring from a branch, not a signed tag) or as a pre-tag script?
-- Which variants: all, or only those whose profile changed?
-
-## Done When
-
-- A profile fault shows up before the tag; the release procedure of the library names the step."
 AS-13,thst71/project-template,Feature,Offer the architecture overview as a template variant,architecture,,,"## Context
 
 Since agent-skills v0.8.0 the architecture overview is opt-in (`architecture-adopt`). project-template's variants cover language and BDT, not the architecture.
