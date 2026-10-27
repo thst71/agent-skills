@@ -132,13 +132,6 @@ Library CI, or a manual pre-tag step, vendors the library branch into the projec
 ## Done When
 
 - A profile fault shows up before the tag; the release procedure of the library names the step."
-AS-11,thst71/agent-skills,Bug,java-maven snippets use mvn instead of the wrapper,toolchain,,,"## Context
-
-The java-maven profile says to use the wrapper `./mvnw` when the project has one, but the task table, the Release Build and the Pull Request steps call `mvn`.
-
-## Done When
-
-- The snippets use `./mvnw` (with `mvn` named as the fallback for projects without a wrapper), consistent with java-gradle's `./gradlew`."
 AS-12,thst71/agent-skills,Task,Java profiles: JUnit 6 instead of JUnit 5,toolchain,,,"## Context
 
 The test tables of java-maven and java-gradle name ""JUnit 5"" for unit, component and integration tests. JUnit 6 is current; project-template uses 6.1.3.
