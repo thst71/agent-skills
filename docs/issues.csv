@@ -127,11 +127,3 @@ A further variant dimension (e.g. `init.sh <node|python> <bdt|plain> [arch] <nam
 ## Done When
 
 - The variant is generated and green in the template's CI."
-AS-14,thst71/project-template,Task,Vendor agent-skills v0.8.0 into project-template,toolchain;testing,,,"## Context
-
-project-template still vendors v0.7.0. v0.8.0 changes the test commands of the profiles (every test run records its durations).
-
-## Done When
-
-- The template vendors v0.8.0; every variant's test task writes its duration report and ignores `build/`; CI green.
-- Waits for the user's go."
